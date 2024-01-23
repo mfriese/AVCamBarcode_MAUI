@@ -61,11 +61,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Ex.AVCamera\Ex.AVCamera.csproj" />
-	</ItemGroup>
-	<ItemGroup>
 	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="QrScanService.cs">
 	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
 	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Ex.iOS.Camera\Ex.iOS.Camera.csproj" />
 	</ItemGroup>
 </Project>
