@@ -517,7 +517,7 @@ namespace AVCamBarcode {
 
 		private void OnRegionOfInterestChanged (object sender, EventArgs e)
 		{
-			var newRegion = (sender as PreviewView).RegionOfInterest;
+			var newRegion = (sender as PreviewView)?.RegionOfInterest ?? CGRect.Empty;
 			DispatchQueue.MainQueue.DispatchAsync (() => {
 				// Ensure we are not drawing old metadata object overlays.
 				this.RemoveMetadataObjectOverlayLayers ();
@@ -587,24 +587,30 @@ namespace AVCamBarcode {
 
 		private void OnSessionWasInterrupted (NSNotification notification)
 		{
-			// In some scenarios we want to enable the user to resume the session running.
-			// For example, if music playback is initiated via control center while
-			// using AVMetadataRecordPlay, then the user can let AVMetadataRecordPlay resume
-			// the session running, which will stop music playback. Note that stopping
-			// music playback in control center will not automatically resume the session
-			// running. Also note that it is not always possible to resume
+            // In some scenarios we want to enable the user to resume the session running.
+            // For example, if music playback is initiated via control center while
+            // using AVMetadataRecordPlay, then the user can let AVMetadataRecordPlay resume
+            // the session running, which will stop music playback. Note that stopping
+            // music playback in control center will not automatically resume the session
+            // running. Also note that it is not always possible to resume
+			if (null != notification && null != notification.UserInfo)
+			{
+				var reasonIntegerValue = ((NSNumber)notification.UserInfo[AVCaptureSession.InterruptionReasonKey]).Int32Value;
+				var reason = (AVCaptureSessionInterruptionReason)reasonIntegerValue;
+                Console.WriteLine($"Capture session was interrupted with reason {reason}");
 
-			var reasonIntegerValue = ((NSNumber) notification.UserInfo [AVCaptureSession.InterruptionReasonKey]).Int32Value;
-			var reason = (AVCaptureSessionInterruptionReason) reasonIntegerValue;
-			Console.WriteLine ($"Capture session was interrupted with reason {reason}");
-
-			if (reason == AVCaptureSessionInterruptionReason.VideoDeviceNotAvailableWithMultipleForegroundApps) {
-				// Simply fade-in a label to inform the user that the camera is unavailable.
-				this.CameraUnavailableLabel.Hidden = false;
-				this.CameraUnavailableLabel.Alpha = 0;
-				UIView.Animate (0.25d, () => this.CameraUnavailableLabel.Alpha = 1);
-			}
-		}
+				if (reason == AVCaptureSessionInterruptionReason.VideoDeviceNotAvailableWithMultipleForegroundApps) {
+					// Simply fade-in a label to inform the user that the camera is unavailable.
+					this.CameraUnavailableLabel.Hidden = false;
+					this.CameraUnavailableLabel.Alpha = 0;
+					UIView.Animate (0.25d, () => this.CameraUnavailableLabel.Alpha = 1);
+				}
+            }
+			else
+			{
+                Console.WriteLine($"Capture session was interrupted with unknown reason!");
+            }
+        }
 
 		private void OnSessionInterruptionEnded (NSNotification notification)
 		{

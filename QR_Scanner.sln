@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ex.AVCamera", "Ex.AVCamera\Ex.AVCamera.csproj", "{8C23A2A0-0B65-474A-AE44-EC6C1573019C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ex.iOS.Camera", "Ex.iOS.Camera\Ex.iOS.Camera.csproj", "{8C23A2A0-0B65-474A-AE44-EC6C1573019C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrNativeScanner", "QrNativeScanner\QrNativeScanner.csproj", "{6D3AC910-6C1A-4923-9EB2-6ED5F73AF4B0}"
 EndProject

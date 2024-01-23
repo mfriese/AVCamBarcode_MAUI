@@ -69,7 +69,7 @@ namespace AVCamBarcode {
 
 		public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 		{
-			NSIndexPath [] indexPathsToReload = null;
+			NSIndexPath [] indexPathsToReload;
 			if (this.isMultipleSelectionAllowed) {
 				var item = this.items [indexPath.Row];
 				if (!this.selectedItems.Remove (item)) {
