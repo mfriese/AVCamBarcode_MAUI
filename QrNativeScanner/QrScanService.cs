@@ -1,7 +1,5 @@
 ﻿using AVCamBarcode;
-using CommunityToolkit.Maui.Views;
 using CoreGraphics;
-using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
 using UIKit;
 
 namespace WorkApp.Services
@@ -28,44 +26,39 @@ namespace WorkApp.Services
             TryRestoreSettings(cameraViewController);
 
             // Forms has an extension that lets us convert to a forms view
-            var wrappedFormsView = cameraViewController?.View.ToView();
+            /*var wrappedFormsView = cameraViewController?.View.ToView();
 
             // Create a page so we can add it to the navigation stack
             var contentPage = new Microsoft.Maui.Controls.ContentPage()
             {
                 Content = wrappedFormsView,
                 Background = Brush.Green
-            };
+            };*/
 
             if (cameraViewController is not null)
+            {
                 // listen to barcode events
                 cameraViewController.BarcodeSelected += (s, e)
                     => MainThread.BeginInvokeOnMainThread(() =>
                     {
                         TryPersistSettings(cameraViewController);
 
-                        // run this on the main thread ...
-                        _ = Shell.Current.Navigation.PopAsync();
+                        Microsoft.Maui.ApplicationModel.Platform.
+                            GetCurrentUIViewController()?.
+                            DismissViewController(true, null);
 
                         // Launch callback with result
                         continuation?.Invoke(e);
                     });
 
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                try
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
                     // run this on the main thread ...
-                    Shell.Current.Navigation.PushAsync(contentPage);
-
-                    //cp.Content = wrappedFormsView;
-                }
-                catch(Exception exp)
-                {
-                    Console.WriteLine(exp.Message);
-                    Console.WriteLine(exp.StackTrace);
-                }
-            });
+                    Microsoft.Maui.ApplicationModel.Platform.
+                        GetCurrentUIViewController()?.
+                        PresentViewController(cameraViewController, true, null);
+                });
+            }
         }
 
         /// <summary>
